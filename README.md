@@ -1,4 +1,4 @@
-# おぼえてる？わたしのこと 〜ふーさんの じこしょうかいクイズ〜
+# ふーです🐻。トーストに塗るのはメイプルシロップです。
 
 ▶ **あそぶ: https://ryowatanabe1161-svg.github.io/oboeteru-watashi/**
 

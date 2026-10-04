@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#ff8fab">
-<title>おぼえてる？わたしのこと 〜ふーさんの じこしょうかいクイズ〜</title>
+<title>ふーです🐻。トーストに塗るのはメイプルシロップです。</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏷️</text></svg>">
 <style>
 :root{--bg:#fff6ef;--ink:#3d2c2e;--pink:#ff8fab;--pinkd:#e8668a;--mint:#7fd8be;--sky:#8ecae6;--sun:#ffd166;--card:#fff;--line:#f0dcd2;--ok:#3fbf7f;--ng:#ef5b5b}
@@ -31,8 +31,11 @@ input{font:inherit}
 .logo{text-align:center;padding:18px 0 4px}
 .logo .tag{display:inline-block;background:#fff;border:3px solid var(--pink);border-radius:18px;padding:10px 18px 12px;box-shadow:0 5px 0 var(--pinkd);transform:rotate(-2deg);position:relative}
 .logo .tag:before{content:"";position:absolute;top:-14px;left:50%;width:14px;height:14px;margin-left:-7px;border-radius:50%;border:3px solid var(--pink);background:var(--bg)}
+.logo .tag{margin:0;max-width:100%}
 .logo .t1{font-size:34px;font-weight:900;color:var(--pinkd);letter-spacing:1px}
-.logo .t2{font-size:22px;font-weight:900}
+.logo .t2{font-size:21px;font-weight:900;line-height:1.45;margin-top:2px}
+@media (max-width:360px){.logo .t1{font-size:29px}.logo .t2{font-size:18px}}
+.lobbyTitle{text-align:center;font-size:13.5px;font-weight:900;color:var(--pinkd);line-height:1.5;margin-top:-2px}
 .logo .t3{font-size:13px;font-weight:800;opacity:.7;margin-top:10px}
 .logo .bear{font-size:44px;display:block;margin-top:6px;animation:bob 2.4s ease-in-out infinite}
 @keyframes bob{50%{transform:translateY(-6px) rotate(4deg)}}
@@ -125,7 +128,7 @@ body.is-host .guest-only{display:none!important}
 <div id="banner"></div>
 <!-- タイトル -->
 <section class="screen active" id="title"><div class="col">
-  <div class="logo"><div class="tag"><div class="t1">おぼえてる？</div><div class="t2">わたしのこと</div></div><div class="t3">〜ふーさんの じこしょうかいクイズ〜</div><span class="bear">🐻🏷️</span></div>
+  <div class="logo"><h1 class="tag" aria-label="ふーです🐻。トーストに塗るのはメイプルシロップです。"><div class="t1">ふーです🐻。</div><div class="t2">トーストに塗るのは<br>メイプルシロップです。</div></h1><div class="t3">自己紹介して、覚えて、クイズで勝負！</div><span class="bear">🍞🍁</span></div>
   <div class="card">
     <div class="lab">ニックネーム（自己紹介で「〇〇です。」に使います）</div>
     <input class="in" id="nameIn" maxlength="8" placeholder="例：さとう" autocomplete="nickname">
@@ -140,6 +143,7 @@ body.is-host .guest-only{display:none!important}
 </div></section>
 <!-- ロビー -->
 <section class="screen" id="lobby"><div class="col">
+  <div class="lobbyTitle">🐻 ふーです🐻。<wbr>トーストに塗るのは<wbr>メイプルシロップです。</div>
   <div class="card" style="text-align:center"><div class="lab">部屋コード</div><div class="codeBig" id="codeBig"></div><div id="qr"></div><div class="url" id="inviteUrl"></div><div class="row"><button class="btn" id="copyBtn">🔗 コピー</button><button class="btn" id="shareBtn">📤 共有</button></div></div>
   <div class="card"><div class="row" style="align-items:center"><div class="lab" style="margin:0">参加者</div><div class="lab" id="seatCount" style="text-align:right;margin:0"></div></div><div id="seatList"></div>
     <button class="btn host-only" id="addCpuBtn" style="margin-top:8px">🐻 ふーさん（CPU）を追加</button><p class="hint" id="seatHint"></p></div>

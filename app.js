@@ -1,4 +1,4 @@
-/* おぼえてる？わたしのこと 〜ふーさんの じこしょうかいクイズ〜 オンライン版
+/* ふーです🐻。トーストに塗るのはメイプルシロップです。 オンライン版
  * 構成：WebRTC（PeerJS）による P2P。ホストのブラウザが唯一の正（authoritative）。
  * 自己紹介の答えは「表示中の数秒だけ」参加者に送ります（あとから見返せない＝覚えるのがゲーム）。
  * クイズの正解は答え合わせのときだけ送ります。
@@ -375,7 +375,7 @@
   };
   $('shareBtn').onclick = function () {
     var u = $('inviteUrl').textContent;
-    if (navigator.share) navigator.share({ title: 'おぼえてる？わたしのこと', text: '自己紹介して、覚えて、クイズで勝負！', url: u }).catch(function () {}); else $('copyBtn').click();
+    if (navigator.share) navigator.share({ title: 'ふーです🐻。トーストに塗るのはメイプルシロップです。', text: '自己紹介して、覚えて、クイズで勝負！', url: u }).catch(function () {}); else $('copyBtn').click();
   };
 
   // =====================================================================
