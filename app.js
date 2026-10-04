@@ -31,7 +31,7 @@
     about: ['ふーさんのこと、おぼえてるクマ？', 'みんな覚えてるかなクマ？', 'ドキドキするクマ…'],
     nobody: ['みんな忘れちゃったクマ〜？しょんぼりクマ', 'ふーさん、影がうすいクマ…？']
   };
-  var PER_OPTS = [{ v: 2, l: '2つ', s: '短め' }, { v: 3, l: '3つ', s: '標準' }, { v: 4, l: '4つ', s: 'じっくり' }];
+  var PER_OPTS = [{ v: 2, l: '2枚', s: '短め' }, { v: 3, l: '3枚', s: '標準' }, { v: 4, l: '4枚', s: '' }, { v: 5, l: '5枚', s: 'じっくり' }];
   var SHOW_OPTS = [{ v: 3, l: '3秒', s: 'むずかしい' }, { v: 5, l: '5秒', s: '標準' }, { v: 8, l: '8秒', s: 'やさしい' }];
   var QUIZ_OPTS = [{ v: 0, l: 'ぜんぶ', s: '標準' }, { v: 8, l: '8問', s: '' }, { v: 12, l: '12問', s: '' }, { v: 16, l: '16問', s: '' }];
   var LS_ID = 'ob-online-client-id', LS_NAME = 'ob-online-name', LS_HOST = 'ob-online-host-room', SS_CLIENT = 'ob-online-joined', LS_VOICE = 'ob-online-voice';
@@ -562,7 +562,7 @@
       var nm = nameOf(v, g.p), q = O.PROMPTS[g.k].q;
       $('phLabel').textContent = '① 自己紹介 ' + (g.cur + 1) + ' / ' + g.total;
       key = v.gameNo + ':i:' + g.cur + ':' + g.sub;
-      var promptCard = '<div class="prompt"><div class="pl">お題カード（' + g.round + '巡目 / ' + g.per + '）</div><div class="pq">' + esc(q) + '</div></div>';
+      var nth = g.cur % g.n, promptCard = '<div class="prompt' + (nth === 0 && g.sub === 'write' ? ' newcard' : '') + '"><div class="pl">お題カード ' + g.round + ' / ' + g.per + '枚目 ・ みんなが答えるよ（' + (nth + 1) + ' / ' + g.n + '人目）</div><div class="pq">' + esc(q) + '</div></div>';
       if (g.sub === 'write' && g.p === me) {
         h = promptCard + '<div class="card"><div class="big" style="font-size:17px;margin-bottom:6px">✍️ あなたの番！</div><div class="sent">' + esc(nm) + 'です。<br>' + esc(q) + 'は…<input class="in" id="ansIn" maxlength="40" placeholder="ここに答えを入力" autocomplete="off" enterkeyhint="done">…です。</div><div class="counter" id="ansCnt">0 / ' + O.MAX_ANS + '</div>' +
           '<div class="row" style="margin-top:8px"><button class="btn" id="ansRand" style="flex:.6">🎲 おまかせ</button><button class="btn main" id="ansGo">決定！</button></div><p class="hint">決定すると、みんなの画面に数秒だけ表示されます。声に出して言うのもおすすめ！</p></div>';
@@ -621,8 +621,9 @@
       if (k === 0 || g.scores[i] !== g.scores[order[k - 1]]) rank = k;
       return '<div class="rk' + (rank === 0 ? ' first' : '') + '"><span class="md">' + (medals[rank] || rank + 1) + '</span>' + av(v, i) + '<span class="nm">' + esc(nameOf(v, i)) + (i === me ? '（あなた）' : '') + '<small>正解 ' + g.rights[i] + '問</small></span><span class="sc">' + g.scores[i] + '点</span></div>';
     }).join('');
-    $('introList').innerHTML = v.pids.map(function (_, p) {
-      return g.intros.filter(function (x) { return x.p === p; }).map(function (x) { return '<div class="intro"><span style="color:' + colorOf(p) + '">●</span> ' + esc(nameOf(v, p)) + '：' + esc(O.PROMPTS[x.k].q) + 'は<b>' + esc(x.text) + '</b>' + (x.cpu && seatOfView(v, p).kind !== 'cpu' ? '（ふーさん代理）' : '') + '</div>'; }).join('');
+    var ks = []; g.intros.forEach(function (x) { if (ks.indexOf(x.k) < 0) ks.push(x.k); });
+    $('introList').innerHTML = ks.map(function (k) {
+      return '<div class="intro"><div style="font-weight:900">🃏 ' + esc(O.PROMPTS[k].q) + '</div>' + g.intros.filter(function (x) { return x.k === k; }).map(function (x) { return '<div><span style="color:' + colorOf(x.p) + '">●</span> ' + esc(nameOf(v, x.p)) + '：<b>' + esc(x.text) + '</b>' + (x.cpu && seatOfView(v, x.p).kind !== 'cpu' ? '（ふーさん代理）' : '') + '</div>'; }).join('') + '</div>';
     }).join('');
     var k = v.code + ':' + v.gameNo;
     if (k !== endKey) { endKey = k; window.scrollTo(0, 0); confetti(); }

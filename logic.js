@@ -67,11 +67,11 @@
   function question(name, k) { return san(name) + 'の' + PROMPTS[k].q + 'は何だったでしょう？'; }
   function san(name) { return /さん/.test(name) ? name : name + 'さん'; }
 
-  // ゲーム作成：n人 × per個のお題（全員ちがうお題・ゲーム内で重複なし）。順番は「1巡目：全員1つずつ → 2巡目…」
+  // ゲーム作成：お題カードを per 枚引く（重複なし）。1枚ごとに全員が席順にそのお題で自己紹介する
   function createGame(n, per, seed) {
-    var r = rng(seed), ks = shuffle(PROMPTS.map(function (_, i) { return i; }), r), intros = [], start = Math.floor(r() * n);
-    per = Math.max(1, Math.min(per, Math.floor(PROMPTS.length / n)));
-    for (var round = 0; round < per; round++) for (var j = 0; j < n; j++) { var p = (start + j) % n; intros.push({ p: p, k: ks[round * n + p], text: null, cpu: false }); }
+    var r = rng(seed), ks = shuffle(PROMPTS.map(function (_, i) { return i; }), r), intros = [];
+    per = Math.max(1, Math.min(per, PROMPTS.length));
+    for (var round = 0; round < per; round++) for (var p = 0; p < n; p++) intros.push({ p: p, k: ks[round], text: null, cpu: false });
     return { n: n, per: per, seed: seed, intros: intros, cur: 0, quiz: null, qi: -1, scores: new Array(n).fill(0), rights: new Array(n).fill(0) };
   }
   function cpuAnswer(k, r, avoid) {
@@ -79,7 +79,8 @@
     if (!a.length) a = PROMPTS[k].a;
     return a[Math.floor(r() * a.length)];
   }
-  // クイズ：記録された自己紹介から作る。選択肢＝正解＋まぎらわしい答え3つ（同じお題のありがちな答え2つ＋ほかの人の本当の答え1つ。足りなければ補充）
+  // クイズ：記録された（人, お題）の答えからランダムに出題。選択肢＝正解＋まぎらわしい答え3つ
+  // （①同じお題へのほかの人の本当の答え → ②そのお題のありがちな答え → ③ほかのお題の答え → ④予備リスト の順で、重複なしで補充）
   function buildQuiz(G, cap, seed) {
     var r = rng(seed ^ 0x5bd1e995), list = G.intros.filter(function (x) { return x.text; });
     shuffle(list, r);
@@ -88,11 +89,9 @@
     return list.map(function (it) {
       var used = [norm(it.text)], opts = [it.text];
       function add(x) { var nx = norm(x); if (!nx || used.indexOf(nx) >= 0 || opts.length >= 4) return false; used.push(nx); opts.push(x); return true; }
-      var same = shuffle(PROMPTS[it.k].a.slice(), r), others = shuffle(G.intros.filter(function (x) { return x.text && x !== it; }).map(function (x) { return x.text; }), r);
-      var s = 0; while (opts.length < 3 && s < same.length) add(same[s++]);
-      for (var o = 0; o < others.length && opts.length < 4; o++) add(others[o]);
-      while (s < same.length && opts.length < 4) add(same[s++]);
-      var g = shuffle(GENERIC.slice(), r); for (var q = 0; q < g.length && opts.length < 4; q++) add(g[q]);
+      function texts(f) { return shuffle(G.intros.filter(function (x) { return x.text && x !== it && f(x); }).map(function (x) { return x.text; }), r); }
+      [texts(function (x) { return x.k === it.k; }), shuffle(PROMPTS[it.k].a.slice(), r), texts(function (x) { return x.k !== it.k; }), shuffle(GENERIC.slice(), r)]
+        .forEach(function (pool) { for (var i = 0; i < pool.length && opts.length < 4; i++) add(pool[i]); });
       var order = shuffle([0, 1, 2, 3].slice(0, opts.length), r);
       return { p: it.p, k: it.k, choices: order.map(function (x) { return opts[x]; }), correct: order.indexOf(0) };
     });

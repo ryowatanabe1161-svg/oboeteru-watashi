@@ -66,6 +66,8 @@ input{font:inherit}
 .pc .sc{color:var(--pinkd)}.pc .mk{font-size:12px}
 .stage{flex:1;display:flex;flex-direction:column;gap:12px;padding:10px 14px calc(16px + env(safe-area-inset-bottom));max-width:560px;width:100%;margin:0 auto}
 .prompt{background:var(--sun);border-radius:18px;padding:14px;text-align:center;box-shadow:0 4px 0 #e6b84a;position:relative}
+.prompt.newcard{animation:card .6s cubic-bezier(.3,1.5,.6,1)}
+@keyframes card{0%{transform:rotateY(90deg) scale(.8)}100%{transform:none}}
 .prompt .pl{font-size:12px;font-weight:900;opacity:.7}
 .prompt .pq{font-size:24px;font-weight:900;margin-top:2px}
 .speaker{display:flex;align-items:center;gap:10px;font-weight:900}
@@ -147,7 +149,7 @@ body.is-host .guest-only{display:none!important}
   <div class="card" style="text-align:center"><div class="lab">部屋コード</div><div class="codeBig" id="codeBig"></div><div id="qr"></div><div class="url" id="inviteUrl"></div><div class="row"><button class="btn" id="copyBtn">🔗 コピー</button><button class="btn" id="shareBtn">📤 共有</button></div></div>
   <div class="card"><div class="row" style="align-items:center"><div class="lab" style="margin:0">参加者</div><div class="lab" id="seatCount" style="text-align:right;margin:0"></div></div><div id="seatList"></div>
     <button class="btn host-only" id="addCpuBtn" style="margin-top:8px">🐻 ふーさん（CPU）を追加</button><p class="hint" id="seatHint"></p></div>
-  <div class="card"><div class="lab">1人あたりのお題の数</div><div class="seg" id="perSeg"></div>
+  <div class="card"><div class="lab">お題の数（1枚ごとに全員が答えます）</div><div class="seg" id="perSeg"></div>
     <div class="lab" style="margin-top:10px">答えを見せる時間</div><div class="seg" id="showSeg"></div>
     <div class="lab" style="margin-top:10px">クイズの問題数</div><div class="seg" id="quizSeg"></div>
     <p class="hint guest-only">設定はホストが決めます。</p></div>
@@ -182,9 +184,9 @@ body.is-host .guest-only{display:none!important}
   <button class="btn" id="menuLeave">🚪 退出する</button>
   <button class="btn main" id="menuClose">とじる</button></div></div>
 <div class="ov" id="rulesModal"><div class="card"><h3>📖 あそびかた</h3><ol class="rules">
-  <li><b>① 自己紹介タイム</b>：お題カードが出ます（例：好きなおにぎりの具）。順番に「〇〇です。（お題）は△△です。」と自己紹介。答えを入力すると、みんなの画面に数秒だけ大きく表示されて、すぐ消えます。<b>あとから見返せないので、しっかり覚えよう！</b>（声に出して言うのもおすすめ）</li>
-  <li>お題は1人2〜4個。全員ちがうお題です。</li>
-  <li><b>② クイズタイム</b>：「〇〇さんの（お題）は何だったでしょう？」4つの中から選んでタップ！ 早く正解した順に <b>3点・2点</b>、それ以外の正解は <b>1点</b>。まちがえたらその問題は終わり。</li>
+  <li><b>① 自己紹介タイム</b>：お題カードを1枚引きます（例：好きなおにぎりの具）。<b>全員が同じお題で</b>、席順に「〇〇です。（お題）は△△です。」と自己紹介。答えを入力すると、みんなの画面に数秒だけ大きく表示されて、すぐ消えます。<b>あとから見返せないので、しっかり覚えよう！</b>（声に出して言うのもおすすめ）</li>
+  <li>全員が答えたら次のお題カードへ。お題の数は2〜5枚（ロビーで設定）。</li>
+  <li><b>② クイズタイム</b>：みんなの答えからランダムに出題。「〇〇さんの（お題）は何だったでしょう？」4つの中から選んでタップ！ ほかの人の同じお題の答えもまざるので要注意！ 早く正解した順に <b>3点・2点</b>、それ以外の正解は <b>1点</b>。まちがえたらその問題は終わり。</li>
   <li>自分についての問題には答えられません。「みんな覚えてるかな？」と見守ろう。</li>
   <li>いちばん点数が多い人の勝ち！ 最後にみんなの自己紹介を答え合わせできます。</li>
   <li>🐻 ふーさん（CPU）も自己紹介してクイズに参加します。ときどき忘れるクマ。</li>
